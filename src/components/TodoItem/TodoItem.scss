@@ -1,0 +1,159 @@
+.todo-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.todo-title {
+  margin-left: 10px;
+}
+
+.todo-title.completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.edit-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.delete_icon {
+  width: 20px;
+  height: 20px;
+}
+
+.button-container {
+  display: flex;
+  gap: 5px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  appearance: none;
+  background-color: rgb(255, 255, 255);
+  outline: none;
+  cursor: pointer;
+}
+
+.checkbox:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.button-update {
+  padding: 10px;
+  background-color: #2196f3;
+  border: none;
+  border-radius: 5px;
+}
+
+.button-delete {
+  padding: 10px;
+  background-color: rgb(231, 95, 118);
+  border: none;
+  border-radius: 5px;
+}
+
+.container {
+  display: flex;
+  width: 30px;
+  justify-content: center;
+  word-wrap: break-word;
+  overflow-x: auto;
+  align-items: center;
+  padding-right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container .completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 20px;
+  width: 25px;
+  background-color: white;
+  border: 1px grey solid;
+  border-radius: 15px;
+}
+
+.container input:checked ~ .checkmark {
+  background-color: #2196f3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.container .checkmark:after {
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  margin-left: 5px;
+  margin-top: 1px;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.edit-input {
+  border: 1px solid rgb(233, 225, 225);
+  padding: 5px 10px;
+  border-radius: 4px;
+  width: 350px;
+  outline: none;
+}
+
+.button-save {
+  padding: 10px;
+  background-color: #2196f3;
+  border: none;
+  border-radius: 5px;
+}
+
+.button-cancel {
+  padding: 10px;
+  background-color: rgb(231, 95, 118);
+  border: none;
+  border-radius: 5px;
+}
