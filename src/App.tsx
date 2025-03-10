@@ -1,7 +1,7 @@
 import { useState, useEffect, FunctionComponent } from 'react'
-import { TodoList } from './components/TodoList'
-import { AddTodo } from './components/AddTodo'
-import { TodoFilters } from './components/TodoFilters'
+import { TodoList } from './components/TodoList/TodoList'
+import { AddTodo } from './components/AddTodo/AddTodo'
+import { TodoFilters } from './components/TodoFilters/TodoFilters'
 import './App.scss'
 
 export interface Todo {

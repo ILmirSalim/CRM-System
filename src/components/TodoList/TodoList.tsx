@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react';
 import './TodoList.scss';
 
 import { Todo, TodoRequest } from '../../App';
-import { TodoItem } from '../TodoItem';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 interface TodoListProps {
     todos: Todo[]

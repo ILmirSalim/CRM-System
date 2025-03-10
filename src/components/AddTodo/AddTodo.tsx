@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import './Addtodo.scss'
+import './AddTodo.scss'
 
 interface AddTodoProps {
   addTodo: (title: string) => void
