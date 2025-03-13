@@ -18,10 +18,12 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
         setIsEditing(true)
         setEditText(todo.title)
     }
+
     const toggleIsDone = async () => {
         await setTodoIsDone(todo.id, { isDone: !todo.isDone })
         loadFilteredTodos()
-    };
+    }
+
     const handleUpdateTodo = async () => {
         if (editText !== todo.title) {
             await updateTodo(todo.id, { title: editText })
