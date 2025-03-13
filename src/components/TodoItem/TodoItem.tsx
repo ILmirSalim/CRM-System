@@ -1,42 +1,43 @@
 import { FunctionComponent, useState } from 'react';
-import { Todo, TodoRequest } from '../../App';
 import './TodoItem.scss';
 import edit_icon from '../../assets/edit-2-svgrepo-com.svg'
 import delete_icon from '../../assets/delete-svgrepo-com.svg'
+import { Todo } from '../../types';
+import { deleteTodo, setTodoIsDone, updateTodo } from '../../api';
 
 interface TodoItemProps {
     todo: Todo
-    updateTodo: (id: number, updatedTodo: TodoRequest) => void
-    deleteTodo: (id: number) => void
-    title: string
-    setTitle: (title: string) => void
-    setTodoIsDone: (id: number, updatedTodo: TodoRequest) => void
-    fetchFilteredTodos: () => void
+    loadFilteredTodos: () => void
 }
 
-export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, updateTodo, deleteTodo, setTodoIsDone }) => {
+export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredTodos }) => {
     const [isEditing, setIsEditing] = useState(false)
     const [editText, setEditText] = useState(todo.title)
-
-    const toggleIsDone = () => {
-        setTodoIsDone(todo.id, { isDone: !todo.isDone })
-    }
 
     const handleEditClick = () => {
         setIsEditing(true)
         setEditText(todo.title)
     }
-
-    const handleSaveClick = () => {
+    const toggleIsDone = async () => {
+        await setTodoIsDone(todo.id, { isDone: !todo.isDone })
+        loadFilteredTodos()
+    };
+    const handleUpdateTodo = async () => {
         if (editText !== todo.title) {
-            updateTodo(todo.id, { title: editText })
+            await updateTodo(todo.id, { title: editText })
         }
         setIsEditing(false)
+        loadFilteredTodos()
     }
 
     const handleCancelClick = () => {
         setEditText(todo.title)
         setIsEditing(false)
+    }
+
+    const handleDeleteTodo = async (id: number) => {
+        await deleteTodo(id)
+        loadFilteredTodos()
     }
 
     return (
@@ -59,7 +60,7 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, updateTodo, d
             <div className='button-container'>
                 {isEditing ? (
                     <>
-                        <button className='button-save' onClick={handleSaveClick}>
+                        <button className='button-save' onClick={handleUpdateTodo}>
                             ✔
                         </button>
                         <button className='button-cancel' onClick={handleCancelClick}>
@@ -71,7 +72,7 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, updateTodo, d
                         <button className='button-update' onClick={handleEditClick}>
                             <img className='edit-icon' src={edit_icon} alt='edit-icon' />
                         </button>
-                        <button className='button-delete' onClick={() => deleteTodo(todo.id)}>
+                        <button className='button-delete' onClick={() => handleDeleteTodo(todo.id)}>
                             <img className='delete_icon' src={delete_icon} alt='edit-icon' />
                         </button>
                     </>

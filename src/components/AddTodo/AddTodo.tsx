@@ -1,20 +1,25 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 import './AddTodo.scss'
+import { addTodo } from '../../api';
 
 interface AddTodoProps {
-  addTodo: (title: string) => void
-  title: string
-  setTitle: (title: string) => void
+  loadFilteredTodos: () => void
 }
 
-export const AddTodo: FunctionComponent<AddTodoProps> = ({ addTodo, title, setTitle }) => {
+export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos }) => {
+  const [title, setTitle] = useState('')
+
+  const handleAddTodo = async (title: string) => {
+    await addTodo(title)
+    loadFilteredTodos()
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (title.length >= 2 && title.length <= 64) {
-      addTodo(title)
+      handleAddTodo(title)
       setTitle('')
-    } 
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,18 +27,18 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ addTodo, title, setTi
   }
 
   return (
-      <form onSubmit={handleSubmit} className="add-todo-form">
-        <input
-          type="text"
-          value={title}
-          onChange={handleInputChange}
-          placeholder="Task To Be Done"
-          className='input-addTodo'
-          minLength={2}
-          maxLength={64}
-          required
-        />
-        <button type="submit" className='button-submit'>Add</button>
-      </form>
+    <form onSubmit={handleSubmit} className="add-todo-form">
+      <input
+        type="text"
+        value={title}
+        onChange={handleInputChange}
+        placeholder="Task To Be Done"
+        className='input-addTodo'
+        minLength={2}
+        maxLength={64}
+        required
+      />
+      <button type="submit" className='button-submit'>Add</button>
+    </form>
   )
 }
