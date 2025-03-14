@@ -4,7 +4,7 @@ export const fetchAllTodos = async (): Promise<Todo[]> => {
   try {
     const response = await fetch('https://easydev.club/api/v1/todos')
     const data = await response.json()
-    return data.data as Todo[]
+    return data.data
   } catch (error) {
     console.log('Failed to fetch all todos:', error)
     throw error
@@ -15,7 +15,7 @@ export const fetchFilteredTodos = async (filter: FilterType): Promise<Todo[]> =>
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos?filter=${filter}`)
     const data = await response.json()
-    return data.data as Todo[]
+    return data.data
   } catch (error) {
     console.log('Failed to fetch filtered todos:', error)
     throw error
