@@ -1,40 +1,42 @@
-.todo-item {
+.todoItem {
   display: flex;
   width: 100%;
   justify-content: space-between;
   background-color: white;
-  padding: 10px 15px;
+  padding: 0.625rem 1rem;
   border-radius: 10px;
   align-items: center;
 }
 
-.checkbox-container {
+.checkboxContainer {
   display: flex;
   align-items: center;
 }
 
-.todo-title {
+.todoTitle {
   margin-left: 10px;
+  word-wrap: break-word;
+  width: 300px;
 }
 
-.todo-title.completed {
+.completed {
   text-decoration: line-through;
   opacity: 0.7;
 }
 
-.edit-icon {
+.editIcon {
   width: 20px;
   height: 20px;
 }
 
-.delete_icon {
+.deleteIcon {
   width: 20px;
   height: 20px;
 }
 
-.button-container {
+.buttonContainer {
   display: flex;
-  gap: 5px;
+  gap: 0.375rem;
 }
 
 .checkbox {
@@ -59,15 +61,15 @@
   transform: rotate(45deg);
 }
 
-.button-update {
+.buttonUpdate {
   padding: 10px;
   background-color: #2196f3;
   border: none;
   border-radius: 5px;
 }
 
-.button-delete {
-  padding: 10px;
+.buttonDelete {
+  padding: 0.625rem;
   background-color: rgb(231, 95, 118);
   border: none;
   border-radius: 5px;
@@ -80,7 +82,7 @@
   word-wrap: break-word;
   overflow-x: auto;
   align-items: center;
-  padding-right: 10px;
+  padding-right: 0.625rem;
   cursor: pointer;
   font-size: 18px;
   -webkit-user-select: none;
@@ -89,7 +91,7 @@
   user-select: none;
 }
 
-.container .completed {
+.completed {
   text-decoration: line-through;
   opacity: 0.7;
 }
@@ -136,23 +138,23 @@
   transform: rotate(45deg);
 }
 
-.edit-input {
+.editInput {
   border: 1px solid rgb(233, 225, 225);
-  padding: 5px 10px;
+  padding: 0.3125rem 0.625rem;
   border-radius: 4px;
   width: 350px;
   outline: none;
 }
 
-.button-save {
-  padding: 10px;
+.buttonSave {
+  padding: 0.625rem;
   background-color: #2196f3;
   border: none;
   border-radius: 5px;
 }
 
-.button-cancel {
-  padding: 10px;
+.buttonCancel {
+  padding: 0.625rem;
   background-color: rgb(231, 95, 118);
   border: none;
   border-radius: 5px;

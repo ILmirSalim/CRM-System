@@ -1,21 +1,13 @@
-import { FilterType, Todo, TodoRequest } from "../types"
+import { FilterType, MetaResponse, Todo, TodoRequest } from "../types"
 
-export const fetchAllTodos = async (): Promise<Todo[]> => {
-  try {
-    const response = await fetch('https://easydev.club/api/v1/todos')
-    const data = await response.json()
-    return data.data
-  } catch (error) {
-    console.log('Failed to fetch all todos:', error)
-    throw error
-  }
-}
+const BASE_URL = 'https://easydev.club/api/v1'
 
-export const fetchFilteredTodos = async (filter: FilterType): Promise<Todo[]> => {
+export const fetchFilteredTodos = async (filter: FilterType): Promise<MetaResponse> => {
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos?filter=${filter}`)
+    const response = await fetch(`${BASE_URL}/todos?filter=${filter}`)
     const data = await response.json()
-    return data.data
+
+    return data
   } catch (error) {
     console.log('Failed to fetch filtered todos:', error)
     throw error
@@ -24,7 +16,7 @@ export const fetchFilteredTodos = async (filter: FilterType): Promise<Todo[]> =>
 
 export const addTodo = async (title: string): Promise<Todo> => {
   try {
-    const response = await fetch('https://easydev.club/api/v1/todos', {
+    const response = await fetch(`${BASE_URL}/todos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title }),
@@ -39,7 +31,7 @@ export const addTodo = async (title: string): Promise<Todo> => {
 
 export const setTodoIsDone = async (id: number, updatedTodo: TodoRequest): Promise<Todo> => {
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+    const response = await fetch(`${BASE_URL}/todos/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedTodo),
@@ -54,7 +46,7 @@ export const setTodoIsDone = async (id: number, updatedTodo: TodoRequest): Promi
 
 export const updateTodo = async (id: number, updatedTodo: TodoRequest): Promise<Todo> => {
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+    const response = await fetch(`${BASE_URL}/todos/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedTodo),
@@ -69,7 +61,7 @@ export const updateTodo = async (id: number, updatedTodo: TodoRequest): Promise<
 
 export const deleteTodo = async (id: number): Promise<void> => {
   try {
-    await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+    await fetch(`${BASE_URL}/todos/${id}`, {
       method: 'DELETE',
     })
   } catch (error) {

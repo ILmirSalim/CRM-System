@@ -1,9 +1,10 @@
 import { FunctionComponent, useState } from 'react';
-import './TodoItem.scss';
+import styles from './TodoItem.module.scss';
 import edit_icon from '../../assets/edit-2-svgrepo-com.svg'
 import delete_icon from '../../assets/delete-svgrepo-com.svg'
 import { Todo } from '../../types';
 import { deleteTodo, setTodoIsDone, updateTodo } from '../../api';
+import { Form } from '../../ui/Form';
 
 interface TodoItemProps {
     todo: Todo
@@ -19,17 +20,27 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
         setEditText(todo.title)
     }
 
-    const toggleIsDone = async () => {
-        await setTodoIsDone(todo.id, { isDone: !todo.isDone })
-        loadFilteredTodos()
+    const handleToggleIsDone = async () => {
+        try {
+            await setTodoIsDone(todo.id, { isDone: !todo.isDone })
+            loadFilteredTodos()
+        } catch (error) {
+            console.log('Failed to set todo is done:', error)
+            throw error
+        }
     }
 
     const handleUpdateTodo = async () => {
-        if (editText !== todo.title) {
+        if (editText === todo.title) return
+        try {
             await updateTodo(todo.id, { title: editText })
+            setIsEditing(false)
+            loadFilteredTodos()
+
+        } catch (error) {
+            console.log('Failed to update todo:', error)
+            throw error
         }
-        setIsEditing(false)
-        loadFilteredTodos()
     }
 
     const handleCancelClick = () => {
@@ -37,49 +48,54 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
         setIsEditing(false)
     }
 
-    const handleDeleteTodo = async (id: number) => {
-        await deleteTodo(id)
-        loadFilteredTodos()
+    const handleDeleteTodo = async () => {
+        try {
+            await deleteTodo(todo.id)
+            loadFilteredTodos()
+        } catch (error) {
+            console.log('Failed to delete todo:', error)
+            throw error
+        }
     }
 
     return (
-        <div className="todo-item">
-            <div className='checkbox-container'>
-                <label className={`container ${todo.isDone ? 'completed' : ''}`}>
-                    <input type="checkbox" checked={todo.isDone} onChange={toggleIsDone} />
-                    <span className="checkmark"></span>
+        <li className={styles.todoItem}>
+            <div className={styles.checkboxContainer}>
+                <label className={`${styles.container} ${todo.isDone ? styles.completed : ''}`}>
+                    <input type="checkbox" checked={todo.isDone} onChange={handleToggleIsDone} />
+                    <span className={styles.checkmark}></span>
                 </label>
                 {isEditing ? <input
                     type="text"
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
-                    className="edit-input"
+                    className={styles.editInput}
                     autoFocus
                 />
-                    : <span className={`todo-title ${todo.isDone ? 'completed' : ''}`}>{todo.title}</span>
+                    : <span className={`${styles.todoTitle} ${todo.isDone ? styles.completed : ''}`}>{todo.title}</span>
                 }
             </div>
-            <div className='button-container'>
+            <div className={styles.buttonContainer}>
                 {isEditing ? (
-                    <>
-                        <button className='button-save' onClick={handleUpdateTodo}>
+                    <Form onSubmit={handleUpdateTodo}>
+                        <button type="submit" className={styles.buttonSave}>
                             ✔
                         </button>
-                        <button className='button-cancel' onClick={handleCancelClick}>
+                        <button type="button" className={styles.buttonCancel} onClick={handleCancelClick}>
                             ✖
                         </button>
-                    </>
+                    </Form>
                 ) : (
                     <>
-                        <button className='button-update' onClick={handleEditClick}>
-                            <img className='edit-icon' src={edit_icon} alt='edit-icon' />
+                        <button className={styles.buttonUpdate} onClick={handleEditClick}>
+                            <img className={styles.editIcon} src={edit_icon} alt='edit-icon' />
                         </button>
-                        <button className='button-delete' onClick={() => handleDeleteTodo(todo.id)}>
-                            <img className='delete_icon' src={delete_icon} alt='edit-icon' />
+                        <button className={styles.buttonDelete} onClick={handleDeleteTodo}>
+                            <img className={styles.deleteIcon} src={delete_icon} alt='edit-icon' />
                         </button>
                     </>
                 )}
             </div>
-        </div>
+        </li>
     )
 }

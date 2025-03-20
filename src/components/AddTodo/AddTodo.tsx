@@ -1,24 +1,34 @@
 import { FunctionComponent, useState } from 'react';
-import './AddTodo.scss'
+import styles from './AddTodo.module.scss'
 import { addTodo } from '../../api';
+import { Form } from '../../ui/Form';
 
 interface AddTodoProps {
   loadFilteredTodos: () => void
+  isLoading: boolean
 }
 
-export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos }) => {
+const MIN_TITLE_LENGTH = 2
+const MAX_TITLE_LENGTH = 64
+
+export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, isLoading }) => {
   const [title, setTitle] = useState('')
 
-  const handleAddTodo = async (title: string) => {
-    await addTodo(title)
-    loadFilteredTodos()
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (title.length >= 2 && title.length <= 64) {
-      handleAddTodo(title)
+    if (title.length < 2) {
+      return
+    }
+    if (title.length > 64) {
+      return
+    }
+
+    try {
+      await addTodo(title)
+      loadFilteredTodos()
       setTitle('')
+    } catch (error) {
+      console.log('Failed to add todo:', error)
     }
   }
 
@@ -27,18 +37,18 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos }) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="add-todo-form">
+    <Form onSubmit={handleSubmit} className={styles.addTodoForm}>
       <input
         type="text"
         value={title}
         onChange={handleInputChange}
         placeholder="Task To Be Done"
-        className='input-addTodo'
-        minLength={2}
-        maxLength={64}
+        className={styles.inputAddTodo}
+        minLength={MIN_TITLE_LENGTH}
+        maxLength={MAX_TITLE_LENGTH}
         required
       />
-      <button type="submit" className='button-submit'>Add</button>
-    </form>
+      <button disabled={isLoading} type="submit" className={styles.buttonSubmit}>Add</button>
+    </Form>
   )
 }

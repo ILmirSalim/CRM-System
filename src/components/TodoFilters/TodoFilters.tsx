@@ -1,37 +1,44 @@
 import { FunctionComponent } from 'react';
-import './TodoFilters.scss';
-import { FilterType } from '../../types';
+import styles from './TodoFilters.module.scss';
+import { FilterType, TodoInfo } from '../../types';
 
 interface TodoFiltersProps {
   filter: FilterType
   setFilter: (filter: FilterType) => void
-  totalCountsTodos: {
-    totalAllTodos: number,
-    totalEndTodos: number,
-    totalInProgressTodos:number,
-  }
+  todoInfo: TodoInfo
+  isLoading: boolean
 }
 
-export const TodoFilters: FunctionComponent<TodoFiltersProps> = ({ filter, setFilter, totalCountsTodos }) => {
+export const TodoFilters: FunctionComponent<TodoFiltersProps> = ({ filter, setFilter, todoInfo, isLoading }) => {
+
+  const filterLabel: Record<FilterType, string> = {
+    [FilterType.ALL]: 'Все',
+    [FilterType.IN_WORK]: 'В работе',
+    [FilterType.COMPLETED]: 'Сделано'
+  }
+
   return (
-    <div className="todo-filters">
+    <div className={styles.todoFilters}>
       <button
+        disabled={isLoading}
         onClick={() => setFilter(FilterType.ALL)}
-        className={`filter-button ${filter === FilterType.ALL ? 'active' : ''}`}
+        className={`${styles.filterButton} ${filter === FilterType.ALL ? styles.active : ''}`}
       >
-        {`Все (${totalCountsTodos?.totalAllTodos})`}
+        {`${filterLabel[FilterType.ALL]} (${todoInfo.all})`}
       </button>
       <button
+        disabled={isLoading}
         onClick={() => setFilter(FilterType.IN_WORK)}
-        className={`filter-button ${filter === FilterType.IN_WORK ? 'active' : ''}`}
+        className={`${styles.filterButton} ${filter === FilterType.IN_WORK ? styles.active : ''}`}
       >
-        {`В работе (${totalCountsTodos?.totalInProgressTodos})`}
+        {`${filterLabel[FilterType.IN_WORK]} (${todoInfo.inWork})`}
       </button>
       <button
+        disabled={isLoading}
         onClick={() => setFilter(FilterType.COMPLETED)}
-        className={`filter-button ${filter === FilterType.COMPLETED ? 'active' : ''}`}
+        className={`${styles.filterButton} ${filter === FilterType.COMPLETED ? styles.active : ''}`}
       >
-        {`Сделано (${totalCountsTodos?.totalEndTodos})`}
+        {`${filterLabel[FilterType.COMPLETED]} (${todoInfo.completed})`}
       </button>
     </div>
   )

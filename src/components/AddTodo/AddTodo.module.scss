@@ -1,37 +1,41 @@
-.button-submit {
-  padding: 10px 40px;
+.buttonSubmit {
+  padding: 0.625rem 2.5rem;
   background-color: #2196f3;
   color: white;
   border: none;
   border-radius: 10px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
-.input-addTodo {
-  border: none; // Убираем все границы
-  border-bottom: 1px solid #666; // Добавляем линию только снизу
-  padding: 10px 20px;
+.inputAddTodo {
+  border: none;
+  border-bottom: 1px solid #666;
+  padding: 0.625rem 1.25rem;
   background-color: rgb(228, 223, 223);
-  width: 371px;
+  width: 370px;
   outline: none;
 }
 
-.add-todo-form {
+.addTodoForm {
   display: flex;
-  gap: 10px;
+  gap: 0.625rem;
   justify-content: space-between;
 }
 
-.error-message {
+.errorMessage {
   color: #ff4444;
   font-size: 12px;
   position: absolute;
   bottom: -22px;
   left: 0;
   width: 100%;
-  padding: 2px 20px;
+  padding: 0.125rem 1.25rem;
 }
 
-
-.form-container {
+.formContainer {
   position: relative;
 }
