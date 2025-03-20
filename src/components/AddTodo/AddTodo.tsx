@@ -16,13 +16,9 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, is
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (title.length < 2) {
-      return
-    }
-    if (title.length > 64) {
-      return
-    }
-
+    if (title.length < 2) return
+    if (title.length > 64) return
+    
     try {
       await addTodo(title)
       loadFilteredTodos()
