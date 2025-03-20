@@ -2,7 +2,7 @@ import { FunctionComponent, useState } from 'react';
 import styles from './TodoItem.module.scss';
 import edit_icon from '../../assets/edit-2-svgrepo-com.svg'
 import delete_icon from '../../assets/delete-svgrepo-com.svg'
-import { Todo } from '../../types';
+import { TitleLength, Todo } from '../../types';
 import { deleteTodo, setTodoIsDone, updateTodo } from '../../api';
 import { Form } from '../../ui/Form';
 
@@ -68,6 +68,8 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
                 {isEditing ? <input
                     type="text"
                     value={editText}
+                    minLength={TitleLength.MIN}
+                    maxLength={TitleLength.MAX}
                     onChange={(e) => setEditText(e.target.value)}
                     className={styles.editInput}
                     autoFocus

@@ -2,14 +2,12 @@ import { FunctionComponent, useState } from 'react';
 import styles from './AddTodo.module.scss'
 import { addTodo } from '../../api';
 import { Form } from '../../ui/Form';
+import { TitleLength } from '../../types';
 
 interface AddTodoProps {
   loadFilteredTodos: () => void
   isLoading: boolean
 }
-
-const MIN_TITLE_LENGTH = 2
-const MAX_TITLE_LENGTH = 64
 
 export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, isLoading }) => {
   const [title, setTitle] = useState('')
@@ -40,8 +38,8 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, is
         onChange={handleInputChange}
         placeholder="Task To Be Done"
         className={styles.inputAddTodo}
-        minLength={MIN_TITLE_LENGTH}
-        maxLength={MAX_TITLE_LENGTH}
+        minLength={TitleLength.MIN}
+        maxLength={TitleLength.MAX}
         required
       />
       <button disabled={isLoading} type="submit" className={styles.buttonSubmit}>Add</button>

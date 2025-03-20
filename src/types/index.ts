@@ -13,6 +13,11 @@ export enum FilterType {
 	COMPLETED = 'completed',
 }
 
+export enum TitleLength {
+    MAX = 64,
+    MIN = 2
+}
+
 export interface TodoInfo {
 	all: number
 	completed: number
