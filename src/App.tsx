@@ -1,11 +1,14 @@
 import { FunctionComponent } from 'react'
-import { TodoList } from './pages/TodoList/TodoList'
 import './App.scss'
+import { AppRoutes } from './components/Routes/Routes';
+import { Navigation } from './components/Navigation/Navigation';
 
 export const App: FunctionComponent = () => {
   return (
     <div className="app">
-      <TodoList />
+      <Navigation />
+      <AppRoutes />
     </div>
+
   )
 }

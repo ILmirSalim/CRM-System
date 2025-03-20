@@ -2,9 +2,10 @@ import { FunctionComponent, useState } from 'react';
 import styles from './TodoItem.module.scss';
 import edit_icon from '../../assets/edit-2-svgrepo-com.svg'
 import delete_icon from '../../assets/delete-svgrepo-com.svg'
-import { Todo } from '../../types';
+import { TitleLength, Todo } from '../../types';
 import { deleteTodo, setTodoIsDone, updateTodo } from '../../api';
 import { Form } from '../../ui/Form';
+import { Input, Button } from 'antd';
 
 interface TodoItemProps {
     todo: Todo
@@ -62,12 +63,14 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
         <li className={styles.todoItem}>
             <div className={styles.checkboxContainer}>
                 <label className={`${styles.container} ${todo.isDone ? styles.completed : ''}`}>
-                    <input type="checkbox" checked={todo.isDone} onChange={handleToggleIsDone} />
+                    <Input type="checkbox" checked={todo.isDone} onChange={handleToggleIsDone} />
                     <span className={styles.checkmark}></span>
                 </label>
-                {isEditing ? <input
+                {isEditing ? <Input
                     type="text"
                     value={editText}
+                    minLength={TitleLength.MIN}
+                    maxLength={TitleLength.MAX}
                     onChange={(e) => setEditText(e.target.value)}
                     className={styles.editInput}
                     autoFocus
@@ -78,21 +81,21 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
             <div className={styles.buttonContainer}>
                 {isEditing ? (
                     <Form onSubmit={handleUpdateTodo}>
-                        <button type="submit" className={styles.buttonSave}>
+                        <Button type="primary" htmlType="submit" className={styles.buttonSave}>
                             ✔
-                        </button>
-                        <button type="button" className={styles.buttonCancel} onClick={handleCancelClick}>
+                        </Button>
+                        <Button type="default" className={styles.buttonCancel} onClick={handleCancelClick}>
                             ✖
-                        </button>
+                        </Button>
                     </Form>
                 ) : (
                     <>
-                        <button className={styles.buttonUpdate} onClick={handleEditClick}>
+                        <Button type='primary' className={styles.buttonUpdate} onClick={handleEditClick}>
                             <img className={styles.editIcon} src={edit_icon} alt='edit-icon' />
-                        </button>
-                        <button className={styles.buttonDelete} onClick={handleDeleteTodo}>
+                        </Button>
+                        <Button className={styles.buttonDelete} onClick={handleDeleteTodo}>
                             <img className={styles.deleteIcon} src={delete_icon} alt='edit-icon' />
-                        </button>
+                        </Button>
                     </>
                 )}
             </div>

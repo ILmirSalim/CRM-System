@@ -39,6 +39,14 @@ export const TodoList: FunctionComponent = () => {
         loadFilteredTodos()
     }, [filter])
 
+    useEffect(() => {
+        const getCurrentTodos = setInterval(() => {
+            loadFilteredTodos();
+        }, 5000)
+
+        return () => clearInterval(getCurrentTodos);
+    }, [filter])
+    
     return (
         <div className={styles.containerApp}>
             <AddTodo loadFilteredTodos={loadFilteredTodos} isLoading={isLoading} />

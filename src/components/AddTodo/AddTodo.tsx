@@ -2,14 +2,13 @@ import { FunctionComponent, useState } from 'react';
 import styles from './AddTodo.module.scss'
 import { addTodo } from '../../api';
 import { Form } from '../../ui/Form';
+import { Input, Button } from 'antd';
+import { TitleLength } from '../../types';
 
 interface AddTodoProps {
   loadFilteredTodos: () => void
   isLoading: boolean
 }
-
-const MIN_TITLE_LENGTH = 2
-const MAX_TITLE_LENGTH = 64
 
 export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, isLoading }) => {
   const [title, setTitle] = useState('')
@@ -18,7 +17,7 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, is
     e.preventDefault()
     if (title.length < 2) return
     if (title.length > 64) return
-    
+
     try {
       await addTodo(title)
       loadFilteredTodos()
@@ -31,20 +30,29 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, is
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
   }
-
+  const isButtonDisabled = isLoading || title.length < TitleLength.MIN || title.length > TitleLength.MAX
   return (
     <Form onSubmit={handleSubmit} className={styles.addTodoForm}>
-      <input
+      <Input
         type="text"
         value={title}
         onChange={handleInputChange}
         placeholder="Task To Be Done"
         className={styles.inputAddTodo}
-        minLength={MIN_TITLE_LENGTH}
-        maxLength={MAX_TITLE_LENGTH}
+        minLength={TitleLength.MIN}
+        maxLength={TitleLength.MAX}
         required
+        autoFocus
+        onPressEnter={handleSubmit}
       />
-      <button disabled={isLoading} type="submit" className={styles.buttonSubmit}>Add</button>
+      <Button
+        disabled={isButtonDisabled}
+        type="primary"
+        htmlType="submit"
+        className={styles.buttonSubmit}
+      >
+        Add
+      </Button>
     </Form>
   )
 }
