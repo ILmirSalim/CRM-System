@@ -72,7 +72,6 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
                     minLength={TitleLength.MIN}
                     maxLength={TitleLength.MAX}
                     onChange={(e) => setEditText(e.target.value)}
-                    className={styles.editInput}
                     autoFocus
                 />
                     : <span className={`${styles.todoTitle} ${todo.isDone ? styles.completed : ''}`}>{todo.title}</span>
@@ -81,19 +80,19 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
             <div className={styles.buttonContainer}>
                 {isEditing ? (
                     <Form onSubmit={handleUpdateTodo}>
-                        <Button type="primary" htmlType="submit" className={styles.buttonSave}>
+                        <Button type="primary" htmlType="submit">
                             ✔
                         </Button>
-                        <Button type="default" className={styles.buttonCancel} onClick={handleCancelClick}>
+                        <Button color="danger" variant="solid"  type="default" onClick={handleCancelClick}>
                             ✖
                         </Button>
                     </Form>
                 ) : (
                     <>
-                        <Button type='primary' className={styles.buttonUpdate} onClick={handleEditClick}>
+                        <Button type='primary' onClick={handleEditClick}>
                             <img className={styles.editIcon} src={edit_icon} alt='edit-icon' />
                         </Button>
-                        <Button className={styles.buttonDelete} onClick={handleDeleteTodo}>
+                        <Button color="danger" variant="solid" onClick={handleDeleteTodo}>
                             <img className={styles.deleteIcon} src={delete_icon} alt='edit-icon' />
                         </Button>
                     </>

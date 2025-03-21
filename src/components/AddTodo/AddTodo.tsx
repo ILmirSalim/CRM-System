@@ -38,7 +38,6 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, is
         value={title}
         onChange={handleInputChange}
         placeholder="Task To Be Done"
-        className={styles.inputAddTodo}
         minLength={TitleLength.MIN}
         maxLength={TitleLength.MAX}
         required
@@ -49,7 +48,6 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, is
         disabled={isButtonDisabled}
         type="primary"
         htmlType="submit"
-        className={styles.buttonSubmit}
       >
         Add
       </Button>
