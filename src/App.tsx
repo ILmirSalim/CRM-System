@@ -9,6 +9,5 @@ export const App: FunctionComponent = () => {
       <Navigation />
       <AppRoutes />
     </div>
-
   )
 }
