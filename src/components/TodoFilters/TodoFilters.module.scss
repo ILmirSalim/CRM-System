@@ -1,0 +1,22 @@
+.todoFilters {
+  padding: 0.625rem 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.875rem;
+  color: rgb(107, 103, 103);
+}
+
+.filterButton {
+  background-color: rgb(228, 223, 223);
+  border: none;
+  color: grey;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.active {
+  color: #2196f3;
+  text-decoration: underline;
+}
