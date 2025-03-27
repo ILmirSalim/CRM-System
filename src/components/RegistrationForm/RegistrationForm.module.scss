@@ -1,0 +1,83 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+justify-content: center;
+// align-items: center;
+}
+
+.formLogoIcon {
+    width: 72px;
+    height: 72px;
+}
+
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+}
+
+.formStyle {
+    width: 420px;
+}
+
+.textForm {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.firstRow {
+    font-size: 36px;
+    font-weight: 700;
+    color: #525252;
+}
+
+.secondRow {
+    font-size: 16px;
+    color: #525252;
+}
+
+.formButton {
+    width: 100%;
+    height: 50px;
+    background-color: #7F265B;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.checkbox {
+    :global {
+        .ant-checkbox-checked .ant-checkbox-inner {
+            background-color: #7F265B;
+            border-color: #7F265B;
+        }
+    }
+    
+}
+
+.ant-checkbox-inner {
+    background-color: #7F265B;
+    border-color: #7F265B;
+}
+
+.forgotPasswordText {
+    color: #7F265B;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.rememberMeText {
+    margin-left: 8px;
+    color: #A1A1A1;
+}
+
+.checkboxWrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
