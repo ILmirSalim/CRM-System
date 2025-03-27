@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react'
 import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import styles from './Navigation.module.scss'
 
 export const Navigation: FunctionComponent = () => {
     const navigate = useNavigate()
@@ -9,7 +10,7 @@ export const Navigation: FunctionComponent = () => {
     }
 
     return (
-        <div className="navigation">
+        <div className={styles.navigate}>
             <Menu
                 mode="vertical"
                 defaultSelectedKeys={['/todos']}
