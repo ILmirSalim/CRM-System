@@ -47,7 +47,7 @@
 
 //         return () => clearInterval(getCurrentTodos);
 //     }, [filter])
-    
+
 //     return (
 //         <div className={styles.containerApp}>
 //             <AddTodo loadFilteredTodos={loadFilteredTodos} isLoading={isLoading} />
@@ -79,7 +79,6 @@
 import { FunctionComponent, useEffect } from 'react';
 import styles from './TodoList.module.scss';
 import { TodoItem } from '../../components/TodoItem/TodoItem';
-// import { FilterType, MetaResponse } from '../../types';
 import { fetchFilteredTodos } from '../../api';
 import { TodoFilters } from '../../components/TodoFilters/TodoFilters';
 import { AddTodo } from '../../components/AddTodo/AddTodo';
@@ -88,36 +87,24 @@ import { store } from '../../store';
 import { observer } from 'mobx-react-lite';
 
 export const TodoList: FunctionComponent = observer(() => {
-    // const [filter, setFilter] = useState<FilterType>(FilterType.ALL)
-    // const [isLoading, setIsLoading] = useState(false)
-    // const [metaData, setMetaData] = useState<MetaResponse>({
-    //     data: [],
-    //     info: {
-    //         all: 0,
-    //         completed: 0,
-    //         inWork: 0
-    //     },
-    //     meta: {
-    //         totalAmount: 0
-    //     }
-    // })
+    const { filter, setFilter, metaData, isLoading, setMetaData, setIsLoading } = store
 
     const loadFilteredTodos = async () => {
-        store.setIsLoading(true)
+        setIsLoading(true)
         try {
-            const data = await fetchFilteredTodos(store.filter);
-            store.setMetaData(data);
+            const data = await fetchFilteredTodos(filter);
+            setMetaData(data);
         } catch (error) {
             console.log('Failed to loading todos:', error);
             throw error;
         } finally {
-            store.setIsLoading(false)
+            setIsLoading(false)
         }
     };
 
     useEffect(() => {
-        loadFilteredTodos()       
-    }, [store.filter])
+        loadFilteredTodos()
+    }, [filter])
 
     useEffect(() => {
         const getCurrentTodos = setInterval(() => {
@@ -125,30 +112,30 @@ export const TodoList: FunctionComponent = observer(() => {
         }, 5000)
 
         return () => clearInterval(getCurrentTodos);
-    }, [store.filter])
-    
+    }, [filter])
+
     return (
         <div className={styles.containerApp}>
-            <AddTodo loadFilteredTodos={loadFilteredTodos} isLoading={store.isLoading} />
+            <AddTodo loadFilteredTodos={loadFilteredTodos} />
             <TodoFilters
                 filter={store.filter}
-                setFilter={store.setFilter}
-                todoInfo={store.metaData?.info}
-                isLoading={store.isLoading}
+                setFilter={setFilter}
+                todoInfo={metaData?.info}
+                isLoading={isLoading}
             />
-            {store.isLoading ? (
+            {isLoading ? (
                 <div className={styles.loaderContainer}>
                     <img className={styles.spinner} src={spinner} alt='spinner' />
                 </div>
             ) : (
                 <ul className={styles.todoList}>
-                    {store.metaData?.data.map((todo) => (
+                    {metaData?.data.map((todo) => (
                         <TodoItem key={todo.id}
                             todo={todo}
                             loadFilteredTodos={loadFilteredTodos}
                         />
                     ))}
-                    {!store.metaData?.data?.length && <p>Задач еще нет...</p>}
+                    {!metaData?.data?.length && <p>Задач еще нет...</p>}
                 </ul>
             )}
 

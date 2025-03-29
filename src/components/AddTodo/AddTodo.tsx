@@ -4,14 +4,15 @@ import { addTodo } from '../../api';
 import { Form } from '../../ui/Form';
 import { Input, Button } from 'antd';
 import { TitleLength } from '../../types';
+import { store } from '../../store';
 
 interface AddTodoProps {
   loadFilteredTodos: () => void
-  isLoading: boolean
 }
 
-export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, isLoading }) => {
+export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos }) => {
   const [title, setTitle] = useState('')
+  const { isLoading } = store
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

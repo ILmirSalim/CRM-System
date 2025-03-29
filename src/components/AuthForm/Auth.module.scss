@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 36px;
 }
 
 .formStyle {
@@ -78,3 +78,20 @@
   justify-content: space-between;
   margin-top: 8px;
 }
+
+.textWrapper {
+  display: flex;
+  gap: 10px;
+  padding-top: 100px;
+}
+
+.textCreate {
+  color: #7f265b;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.textInTextWrapper {
+  color: #828282;
+}
+
