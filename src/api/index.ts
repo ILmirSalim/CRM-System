@@ -1,14 +1,18 @@
-import axios, { AxiosResponse } from 'axios';
-import { FilterType, MetaResponse, Todo, TodoRequest } from "../types"
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { FilterType, MetaResponse, Todo, TodoRequest } from "../types";
 
 const BASE_URL = 'https://easydev.club/api/v1'
 
+const axiosInstance: AxiosInstance = axios.create({
+  baseURL: BASE_URL,
+})
+
 export const fetchFilteredTodos = async (filter: FilterType): Promise<MetaResponse> => {
   try {
-    const response: AxiosResponse<MetaResponse> = await axios.get(`${BASE_URL}/todos`, {
+    const response: AxiosResponse<MetaResponse> = await axiosInstance.get('/todos', {
       params: { filter },
     })
-    return response.data;
+    return response.data
   } catch (error) {
     console.log('Failed to fetch filtered todos:', error)
     throw error
@@ -17,7 +21,7 @@ export const fetchFilteredTodos = async (filter: FilterType): Promise<MetaRespon
 
 export const addTodo = async (title: string): Promise<Todo> => {
   try {
-    const response: AxiosResponse<Todo> = await axios.post(`${BASE_URL}/todos`, {
+    const response: AxiosResponse<Todo> = await axiosInstance.post('/todos', {
       title,
     })
     return response.data
@@ -29,7 +33,7 @@ export const addTodo = async (title: string): Promise<Todo> => {
 
 export const setTodoIsDone = async (id: number, updatedTodo: TodoRequest): Promise<Todo> => {
   try {
-    const response: AxiosResponse<Todo> = await axios.put(`${BASE_URL}/todos/${id}`, updatedTodo)
+    const response: AxiosResponse<Todo> = await axiosInstance.put(`/todos/${id}`, updatedTodo)
     return response.data
   } catch (error) {
     console.log('Failed to update todo status:', error)
@@ -39,17 +43,17 @@ export const setTodoIsDone = async (id: number, updatedTodo: TodoRequest): Promi
 
 export const updateTodo = async (id: number, updatedTodo: TodoRequest): Promise<Todo> => {
   try {
-    const response: AxiosResponse<Todo> = await axios.put(`${BASE_URL}/todos/${id}`, updatedTodo)
+    const response: AxiosResponse<Todo> = await axiosInstance.put(`/todos/${id}`, updatedTodo)
     return response.data
   } catch (error) {
     console.log('Failed to update todo:', error)
     throw error
   }
-};
+}
 
 export const deleteTodo = async (id: number): Promise<void> => {
   try {
-    await axios.delete(`${BASE_URL}/todos/${id}`)
+    await axiosInstance.delete(`/todos/${id}`)
   } catch (error) {
     console.log('Failed to delete todo:', error)
     throw error
