@@ -1,10 +1,13 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import styles from './TodoItem.module.scss';
 import edit_icon from '../../assets/edit-2-svgrepo-com.svg'
 import delete_icon from '../../assets/delete-svgrepo-com.svg'
-import { TitleLength, Todo } from '../../types';
+import { Todo } from '../../types';
 import { deleteTodo, setTodoIsDone, updateTodo } from '../../api';
 import { Input, Button, Form } from 'antd';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { NotificationError } from '../Notification/NotificationError';
+import { TitleLength } from '../../constants';
 
 interface TodoItemProps {
     todo: Todo
@@ -13,13 +16,8 @@ interface TodoItemProps {
 
 export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredTodos }) => {
     const [isEditing, setIsEditing] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
     const [form] = Form.useForm()
-
-    useEffect(() => {
-        if (isEditing) {
-            form.setFieldsValue({ title: todo.title })
-        }
-    }, [isEditing, todo.title, form])
 
     const handleEditClick = () => {
         setIsEditing(true)
@@ -31,6 +29,7 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
             loadFilteredTodos()
         } catch (error) {
             console.log('Failed to set todo is done:', error)
+            setErrorMessage('Failed to delete todo');
             throw error
         }
     }
@@ -43,6 +42,7 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
             loadFilteredTodos()
         } catch (error) {
             console.log('Failed to update todo:', error)
+            setErrorMessage('Failed to update todo');
             throw error
         }
     }
@@ -57,6 +57,7 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
             loadFilteredTodos()
         } catch (error) {
             console.log('Failed to delete todo:', error)
+            setErrorMessage('Failed to delete todo');
             throw error
         }
     }
@@ -69,22 +70,22 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
                     <span className={styles.checkmark}></span>
                 </label>
                 {isEditing ? (
-                    <Form form={form} onFinish={handleUpdateTodo}>
+                    <Form form={form} onFinish={handleUpdateTodo} initialValues={{ title: todo.title }}>
                         <Form.Item
                             name="title"
                             rules={[
                                 { required: true, message: 'Title is required' },
-                                { min: TitleLength.MIN, message: `Title must be at least ${TitleLength.MIN} characters` },
-                                { max: TitleLength.MAX, message: `Title must be no more than ${TitleLength.MAX} characters` }
+                                { min: TitleLength.minLength, message: `Title must be at least ${TitleLength.minLength} characters` },
+                                { max: TitleLength.maxLength, message: `Title must be no more than ${TitleLength.maxLength} characters` }
                             ]}
                         >
                             <Input autoFocus />
                         </Form.Item>
                         <Button type="primary" htmlType="submit">
-                            ✔
+                            <CheckOutlined />
                         </Button>
                         <Button type="default" onClick={handleCancelClick}>
-                            ✖
+                            <CloseOutlined />
                         </Button>
                     </Form>
                 ) : (
@@ -103,6 +104,9 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
                     </>
                 }
             </div>
+            {errorMessage && (
+                <NotificationError message={errorMessage} />
+            )}
         </li>
     )
 }
