@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styles from './AddTodo.module.scss'
 import { addTodo } from '../../api';
 import { Input, Button, Form } from 'antd';
@@ -14,7 +14,7 @@ interface TodoFormValues {
   title: string
 }
 
-export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, isLoading }) => {
+const AddTodoComponent: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, isLoading }) => {
   const [error, setError] = useState(false)
   const [form] = Form.useForm()
 
@@ -65,7 +65,9 @@ export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos, is
           </Button>
         </Form.Item>
       </Form>
-      {error && <NotificationError message='Failed to add todo, try again'/>}
+      {error && <NotificationError message='Failed to add todo, try again' />}
     </>
   )
 }
+
+export const AddTodo = React.memo(AddTodoComponent)

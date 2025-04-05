@@ -19,9 +19,9 @@ export interface TodoInfo {
 	inWork: number
 }
 
-export interface MetaResponse<Todo, TodoInfo> {
-	data: Todo[]
-	info: TodoInfo
+export interface MetaResponse<T, N> {
+	data: T[]
+	info: N
 	meta: {
 		totalAmount: number
 	}
