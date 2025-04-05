@@ -1,42 +1,43 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import styles from './TodoList.module.scss';
-import { TodoItem } from '../../components/TodoItem/TodoItem';
-import { FilterType, MetaResponse } from '../../types';
+import { FilterType, Todo, TodoInfo } from '../../types';
 import { fetchFilteredTodos } from '../../api';
 import { TodoFilters } from '../../components/TodoFilters/TodoFilters';
 import { AddTodo } from '../../components/AddTodo/AddTodo';
 import spinner from '../../assets/tube-spinner.svg'
+import { Todolist } from '../../components/Todolist/Todolist';
 
 export const TodoList: FunctionComponent = () => {
     const [filter, setFilter] = useState<FilterType>(FilterType.ALL)
     const [isLoading, setIsLoading] = useState(false)
-    const [metaData, setMetaData] = useState<MetaResponse>({
-        data: [],
-        info: {
-            all: 0,
-            completed: 0,
-            inWork: 0
-        },
-        meta: {
-            totalAmount: 0
-        }
+    const [todos, setTodos] = useState<Todo[]>([])
+    const [todoInfo, setTodoInfo] = useState<TodoInfo>({
+        all: 0,
+        completed: 0,
+        inWork: 0
     })
 
-    const loadFilteredTodos = async () => {
+    const loadFilteredTodos = useCallback(async () => {
         setIsLoading(true)
         try {
             const data = await fetchFilteredTodos(filter);
-            setMetaData(data);
+            setTodos(data.data)
+            setTodoInfo(data.info)
         } catch (error) {
             console.log('Failed to loading todos:', error);
             throw error;
         } finally {
             setIsLoading(false)
         }
-    };
+    }, [filter])
 
     useEffect(() => {
         loadFilteredTodos()
+        const getCurrentTodos = setInterval(() => {
+            loadFilteredTodos()
+        }, 5000)
+
+        return () => clearInterval(getCurrentTodos)
     }, [filter])
 
     return (
@@ -45,7 +46,7 @@ export const TodoList: FunctionComponent = () => {
             <TodoFilters
                 filter={filter}
                 setFilter={setFilter}
-                todoInfo={metaData?.info}
+                todoInfo={todoInfo}
                 isLoading={isLoading}
             />
             {isLoading ? (
@@ -53,15 +54,7 @@ export const TodoList: FunctionComponent = () => {
                     <img className={styles.spinner} src={spinner} alt='spinner' />
                 </div>
             ) : (
-                <ul className={styles.todoList}>
-                    {metaData?.data.map((todo) => (
-                        <TodoItem key={todo.id}
-                            todo={todo}
-                            loadFilteredTodos={loadFilteredTodos}
-                        />
-                    ))}
-                    {!metaData?.data?.length && <p>Задач еще нет...</p>}
-                </ul>
+                <Todolist todos={todos} loadFilteredTodos={loadFilteredTodos} />
             )}
 
         </div>

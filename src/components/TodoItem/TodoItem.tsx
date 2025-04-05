@@ -2,9 +2,12 @@ import { FunctionComponent, useState } from 'react';
 import styles from './TodoItem.module.scss';
 import edit_icon from '../../assets/edit-2-svgrepo-com.svg'
 import delete_icon from '../../assets/delete-svgrepo-com.svg'
-import { TitleLength, Todo } from '../../types';
+import { Todo } from '../../types';
 import { deleteTodo, setTodoIsDone, updateTodo } from '../../api';
-import { Form } from '../../ui/Form';
+import { Input, Button, Form } from 'antd';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { NotificationError } from '../Notification/NotificationError';
+import { TitleLength } from '../../constants';
 
 interface TodoItemProps {
     todo: Todo
@@ -13,11 +16,11 @@ interface TodoItemProps {
 
 export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredTodos }) => {
     const [isEditing, setIsEditing] = useState(false)
-    const [editText, setEditText] = useState(todo.title)
+    const [errorMessage, setErrorMessage] = useState('')
+    const [form] = Form.useForm()
 
     const handleEditClick = () => {
         setIsEditing(true)
-        setEditText(todo.title)
     }
 
     const handleToggleIsDone = async () => {
@@ -26,25 +29,25 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
             loadFilteredTodos()
         } catch (error) {
             console.log('Failed to set todo is done:', error)
+            setErrorMessage('Failed to delete todo');
             throw error
         }
     }
 
-    const handleUpdateTodo = async () => {
-        if (editText === todo.title) return
+    const handleUpdateTodo = async (values: { title: string }) => {
+        if (values.title === todo.title) return
         try {
-            await updateTodo(todo.id, { title: editText })
+            await updateTodo(todo.id, { title: values.title })
             setIsEditing(false)
             loadFilteredTodos()
-
         } catch (error) {
             console.log('Failed to update todo:', error)
+            setErrorMessage('Failed to update todo');
             throw error
         }
     }
 
     const handleCancelClick = () => {
-        setEditText(todo.title)
         setIsEditing(false)
     }
 
@@ -54,6 +57,7 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
             loadFilteredTodos()
         } catch (error) {
             console.log('Failed to delete todo:', error)
+            setErrorMessage('Failed to delete todo');
             throw error
         }
     }
@@ -62,42 +66,47 @@ export const TodoItem: FunctionComponent<TodoItemProps> = ({ todo, loadFilteredT
         <li className={styles.todoItem}>
             <div className={styles.checkboxContainer}>
                 <label className={`${styles.container} ${todo.isDone ? styles.completed : ''}`}>
-                    <input type="checkbox" checked={todo.isDone} onChange={handleToggleIsDone} />
+                    <Input type="checkbox" checked={todo.isDone} onChange={handleToggleIsDone} />
                     <span className={styles.checkmark}></span>
                 </label>
-                {isEditing ? <input
-                    type="text"
-                    value={editText}
-                    minLength={TitleLength.MIN}
-                    maxLength={TitleLength.MAX}
-                    onChange={(e) => setEditText(e.target.value)}
-                    className={styles.editInput}
-                    autoFocus
-                />
-                    : <span className={`${styles.todoTitle} ${todo.isDone ? styles.completed : ''}`}>{todo.title}</span>
-                }
-            </div>
-            <div className={styles.buttonContainer}>
                 {isEditing ? (
-                    <Form onSubmit={handleUpdateTodo}>
-                        <button type="submit" className={styles.buttonSave}>
-                            ✔
-                        </button>
-                        <button type="button" className={styles.buttonCancel} onClick={handleCancelClick}>
-                            ✖
-                        </button>
+                    <Form form={form} onFinish={handleUpdateTodo} initialValues={{ title: todo.title }}>
+                        <Form.Item
+                            name="title"
+                            rules={[
+                                { required: true, message: 'Title is required' },
+                                { min: TitleLength.minLength, message: `Title must be at least ${TitleLength.minLength} characters` },
+                                { max: TitleLength.maxLength, message: `Title must be no more than ${TitleLength.maxLength} characters` }
+                            ]}
+                        >
+                            <Input autoFocus />
+                        </Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            <CheckOutlined />
+                        </Button>
+                        <Button type="default" onClick={handleCancelClick}>
+                            <CloseOutlined />
+                        </Button>
                     </Form>
                 ) : (
-                    <>
-                        <button className={styles.buttonUpdate} onClick={handleEditClick}>
-                            <img className={styles.editIcon} src={edit_icon} alt='edit-icon' />
-                        </button>
-                        <button className={styles.buttonDelete} onClick={handleDeleteTodo}>
-                            <img className={styles.deleteIcon} src={delete_icon} alt='edit-icon' />
-                        </button>
-                    </>
+                    <span className={`${styles.todoTitle} ${todo.isDone ? styles.completed : ''}`}>{todo.title}</span>
                 )}
             </div>
+            <div className={styles.buttonContainer}>
+                {!isEditing &&
+                    <>
+                        <Button type="primary" onClick={handleEditClick}>
+                            <img className={styles.editIcon} src={edit_icon} alt="edit-icon" />
+                        </Button>
+                        <Button color="danger" variant="solid" onClick={handleDeleteTodo}>
+                            <img className={styles.deleteIcon} src={delete_icon} alt="delete-icon" />
+                        </Button>
+                    </>
+                }
+            </div>
+            {errorMessage && (
+                <NotificationError message={errorMessage} />
+            )}
         </li>
     )
 }

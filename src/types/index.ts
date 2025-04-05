@@ -13,20 +13,15 @@ export enum FilterType {
 	COMPLETED = 'completed',
 }
 
-export enum TitleLength {
-    MAX = 64,
-    MIN = 2
-}
-
 export interface TodoInfo {
 	all: number
 	completed: number
 	inWork: number
 }
 
-export interface MetaResponse {
-	data: Todo[]
-	info: TodoInfo
+export interface MetaResponse<T, N> {
+	data: T[]
+	info: N
 	meta: {
 		totalAmount: number
 	}

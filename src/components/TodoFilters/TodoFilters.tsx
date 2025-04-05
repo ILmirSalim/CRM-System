@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react';
 import styles from './TodoFilters.module.scss';
 import { FilterType, TodoInfo } from '../../types';
+import { Button } from 'antd';
 
 interface TodoFiltersProps {
   filter: FilterType
@@ -19,27 +20,27 @@ export const TodoFilters: FunctionComponent<TodoFiltersProps> = ({ filter, setFi
 
   return (
     <div className={styles.todoFilters}>
-      <button
+      <Button
         disabled={isLoading}
+        type={filter === FilterType.ALL ? "primary" : "default"}
         onClick={() => setFilter(FilterType.ALL)}
-        className={`${styles.filterButton} ${filter === FilterType.ALL ? styles.active : ''}`}
       >
         {`${filterLabel[FilterType.ALL]} (${todoInfo.all})`}
-      </button>
-      <button
+      </Button>
+      <Button
         disabled={isLoading}
+        type={filter === FilterType.IN_WORK ? "primary" : "default"}
         onClick={() => setFilter(FilterType.IN_WORK)}
-        className={`${styles.filterButton} ${filter === FilterType.IN_WORK ? styles.active : ''}`}
       >
         {`${filterLabel[FilterType.IN_WORK]} (${todoInfo.inWork})`}
-      </button>
-      <button
+      </Button>
+      <Button
         disabled={isLoading}
+        type={filter === FilterType.COMPLETED ? "primary" : "default"}
         onClick={() => setFilter(FilterType.COMPLETED)}
-        className={`${styles.filterButton} ${filter === FilterType.COMPLETED ? styles.active : ''}`}
       >
         {`${filterLabel[FilterType.COMPLETED]} (${todoInfo.completed})`}
-      </button>
+      </Button>
     </div>
   )
 }

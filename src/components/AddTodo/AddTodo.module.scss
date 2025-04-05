@@ -1,41 +1,9 @@
-.buttonSubmit {
-  padding: 0.625rem 2.5rem;
-  background-color: #2196f3;
-  color: white;
-  border: none;
-  border-radius: 10px;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.inputAddTodo {
-  border: none;
-  border-bottom: 1px solid #666;
-  padding: 0.625rem 1.25rem;
-  background-color: rgb(228, 223, 223);
-  width: 370px;
-  outline: none;
-}
-
 .addTodoForm {
   display: flex;
   gap: 0.625rem;
   justify-content: space-between;
 }
 
-.errorMessage {
-  color: #ff4444;
-  font-size: 12px;
-  position: absolute;
-  bottom: -22px;
-  left: 0;
+.formInput {
   width: 100%;
-  padding: 0.125rem 1.25rem;
-}
-
-.formContainer {
-  position: relative;
 }
