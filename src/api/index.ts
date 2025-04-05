@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { FilterType, MetaResponse, Todo, TodoRequest } from "../types";
+import { FilterType, MetaResponse, Todo, TodoInfo, TodoRequest } from "../types";
 
 const BASE_URL = 'https://easydev.club/api/v1'
 
@@ -7,9 +7,9 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
 })
 
-export const fetchFilteredTodos = async (filter: FilterType): Promise<MetaResponse> => {
+export const fetchFilteredTodos = async (filter: FilterType): Promise<MetaResponse<Todo, TodoInfo>> => {
   try {
-    const response: AxiosResponse<MetaResponse> = await axiosInstance.get('/todos', {
+    const response: AxiosResponse<MetaResponse<Todo, TodoInfo>> = await axiosInstance.get('/todos', {
       params: { filter },
     })
     return response.data
