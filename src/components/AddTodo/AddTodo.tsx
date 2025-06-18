@@ -1,57 +1,70 @@
-import { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styles from './AddTodo.module.scss'
 import { addTodo } from '../../api';
-import { Form } from '../../ui/Form';
-import { Input, Button } from 'antd';
-import { TitleLength } from '../../types';
+import { Input, Button, Form } from 'antd';
+import { NotificationError } from '../Notification/NotificationError';
+import { TitleLength } from '../../constants';
 import { store } from '../../store';
 
-interface AddTodoProps {
-  loadFilteredTodos: () => void
+interface TodoFormValues {
+  title: string
 }
 
-export const AddTodo: FunctionComponent<AddTodoProps> = ({ loadFilteredTodos }) => {
-  const [title, setTitle] = useState('')
-  const { isLoading } = store
+const AddTodoComponent: FunctionComponent = () => {
+  const { loadFilteredTodos, isLoading } = store
+  const [error, setError] = useState(false)
+  const [form] = Form.useForm()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (title.length < 2) return
-    if (title.length > 64) return
-
+  const handleSubmit = async (value: TodoFormValues) => {
+    const { title } = value
     try {
       await addTodo(title)
       loadFilteredTodos()
-      setTitle('')
+      form.resetFields()
     } catch (error) {
       console.log('Failed to add todo:', error)
+
+      setError(true)
+      setTimeout(() => {
+        setError(false)
+      }, 5000)
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value)
-  }
-  const isButtonDisabled = isLoading || title.length < TitleLength.MIN || title.length > TitleLength.MAX
   return (
-    <Form onSubmit={handleSubmit} className={styles.addTodoForm}>
-      <Input
-        type="text"
-        value={title}
-        onChange={handleInputChange}
-        placeholder="Task To Be Done"
-        minLength={TitleLength.MIN}
-        maxLength={TitleLength.MAX}
-        required
-        autoFocus
-        onPressEnter={handleSubmit}
-      />
-      <Button
-        disabled={isButtonDisabled}
-        type="primary"
-        htmlType="submit"
+    <>
+      <Form
+        className={styles.addTodoForm}
+        onFinish={handleSubmit}
+        form={form}
       >
-        Add
-      </Button>
-    </Form>
+        <Form.Item
+          name="title"
+          className={styles.formInput}
+          rules={[
+            { required: true, message: 'Please input the task to be done!' },
+            { min: TitleLength.minLength, message: `Title must be at least ${TitleLength.minLength} characters!` },
+            { max: TitleLength.maxLength, message: `Title must be no more than ${TitleLength.maxLength} characters!` },
+          ]}
+        >
+          <Input
+            placeholder="Task To Be Done"
+            autoFocus
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            disabled={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            Add
+          </Button>
+        </Form.Item>
+      </Form>
+      {error && <NotificationError message='Failed to add todo, try again' />}
+    </>
   )
 }
+
+export const AddTodo = React.memo(AddTodoComponent)

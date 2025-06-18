@@ -1,17 +1,11 @@
 import { FunctionComponent } from 'react';
 import styles from './TodoFilters.module.scss';
-import { FilterType, TodoInfo } from '../../types';
+import { FilterType } from '../../types';
 import { Button } from 'antd';
+import { store } from '../../store';
 
-interface TodoFiltersProps {
-  filter: FilterType
-  setFilter: (filter: FilterType) => void
-  todoInfo: TodoInfo
-  isLoading: boolean
-}
-
-export const TodoFilters: FunctionComponent<TodoFiltersProps> = ({ filter, setFilter, todoInfo, isLoading }) => {
-
+export const TodoFilters: FunctionComponent = () => {
+  const { filter, setFilter, isLoading, todoInfo } = store
   const filterLabel: Record<FilterType, string> = {
     [FilterType.ALL]: 'Все',
     [FilterType.IN_WORK]: 'В работе',
